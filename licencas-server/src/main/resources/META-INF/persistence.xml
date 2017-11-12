@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="licencas-server"
+		transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		
+		<class>br.com.furb.entity.CategoriaEntity</class>
+		<class>br.com.furb.entity.ClienteEntity</class>
+		<class>br.com.furb.entity.CotacaoEntity</class>
+		<class>br.com.furb.entity.CotacaoId</class>
+		<class>br.com.furb.entity.EstoqueEntity</class>
+		<class>br.com.furb.entity.EstoqueId</class>
+		<class>br.com.furb.entity.FuncaoEntity</class>
+		<class>br.com.furb.entity.ItemProdutoEntity</class>
+		<class>br.com.furb.entity.ItemProdutoId</class>
+		<class>br.com.furb.entity.PedidoEntity</class>
+		<class>br.com.furb.entity.ProdutoCotacaoEntity</class>
+		<class>br.com.furb.entity.ProdutoCotacaoId</class>
+		<class>br.com.furb.entity.ProdutoEntity</class>
+		<class>br.com.furb.entity.RepresentanteEntity</class>
+		<class>br.com.furb.entity.UsuarioEntity</class>
+		<class>br.com.isaguiar.repository.entity.PessoaEntity</class>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/trabalho" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.archive.autodetection" value="class, hbm"/>
+		</properties>
+	</persistence-unit>
+</persistence>
