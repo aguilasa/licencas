@@ -16,12 +16,12 @@ import br.com.furb.entity.CategoriaEntity;
 import br.com.furb.model.Categoria;
 import br.com.furb.model.response.CategoriaResponse;
 import br.com.furb.model.response.CategoriaResponseList;
-import br.com.furb.repository.CategoriaRepository;
+import br.com.furb.repository.LicencaRepository;
 
 @Path("/categoria")
-public class CategoriaService {
+public class LicencasService {
 
-	private final CategoriaRepository repository = new CategoriaRepository();
+	private final LicencaRepository repository = new LicencaRepository();
 
 	@POST
 	@Consumes("application/json; charset=UTF-8")
@@ -51,7 +51,7 @@ public class CategoriaService {
 	@Path("/alterar")
 	public CategoriaResponse alterar(Categoria categoria) {
 
-		CategoriaEntity entity = repository.getCategoria(categoria.getId());
+		CategoriaEntity entity = repository.getLicenca(categoria.getId());
 
 		try {
 			entity.setCategoria(categoria.getCategoria());
@@ -72,7 +72,7 @@ public class CategoriaService {
 		try {
 			List<Categoria> categorias = new ArrayList<>();
 
-			List<CategoriaEntity> lista = repository.getCategorias();
+			List<CategoriaEntity> lista = repository.getLicencas();
 
 			for (CategoriaEntity entity : lista) {
 				categorias.add(new Categoria(entity.getId(), entity.getCategoria()));
@@ -93,7 +93,7 @@ public class CategoriaService {
 	@Path("/categoria/{id}")
 	public Categoria getCategoria(@PathParam("id") Integer id) {
 
-		CategoriaEntity entity = repository.getCategoria(id);
+		CategoriaEntity entity = repository.getLicenca(id);
 
 		if (entity != null)
 			return new Categoria(entity.getId(), entity.getCategoria());
