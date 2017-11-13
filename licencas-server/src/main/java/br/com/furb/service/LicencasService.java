@@ -55,6 +55,7 @@ public class LicencasService {
 
 		UsoLicencaEntity disponivel = repository.getDisponivel();
 		if (disponivel != null) {
+			adquire.setSucesso(true);
 			adquire.setExpiraEm(disponivel.getExpiraEm());
 			adquire.setLicenca(new Licenca(disponivel.getLicenca().getId(), disponivel.getLicenca().getNome()));
 		}

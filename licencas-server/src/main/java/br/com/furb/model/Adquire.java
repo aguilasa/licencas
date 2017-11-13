@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso(Licenca.class)
 public class Adquire {
 
+	private boolean sucesso = false;
 	private Date expiraEm = null;
 	private Licenca licenca = null;
 
@@ -16,9 +17,18 @@ public class Adquire {
 
 	}
 
-	public Adquire(Date expiraEm, Licenca licenca) {
+	public Adquire(Date expiraEm, Licenca licenca, boolean sucesso) {
 		this.expiraEm = expiraEm;
 		this.licenca = licenca;
+		this.sucesso = sucesso;
+	}
+
+	public boolean isSucesso() {
+		return sucesso;
+	}
+
+	public void setSucesso(boolean sucesso) {
+		this.sucesso = sucesso;
 	}
 
 	public Date getExpiraEm() {
