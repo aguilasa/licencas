@@ -44,22 +44,34 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 
 		return null;
 	}
-	
-	
+
 	public UsoLicencaEntity renova(Integer idLicenca) {
 		LicencaEntity licencaEntity = getLicenca(idLicenca);
-		
+
 		if (licencaEntity != null) {
 			UsoLicencaEntity usoLicencaEntity = getUsoLicencaRepository().findByLicencaEntity(licencaEntity);
 			usoLicencaEntity.setExpiraEm(DateUtils.getExpiraEm());
 			getUsoLicencaRepository().persist(usoLicencaEntity);
 			return usoLicencaEntity;
 		}
-		
+
 		return null;
 	}
-	
-	
+
+	public boolean atualiza(Integer idLicenca) {
+		LicencaEntity licencaEntity = getLicenca(idLicenca);
+
+		if (licencaEntity != null) {
+			UsoLicencaEntity usoLicencaEntity = getUsoLicencaRepository().findByLicencaEntity(licencaEntity);
+			
+			if (usoLicencaEntity != null) {
+				getUsoLicencaRepository().remove(usoLicencaEntity);
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public LicencaEntity getLicenca(Integer id) {
 		return this.entityManager.find(LicencaEntity.class, id);
