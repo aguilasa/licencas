@@ -63,7 +63,7 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 	}
 
 	public boolean atualiza(Integer idLicenca) {
-		liberar();
+		boolean retorno = false;
 		LicencaEntity licencaEntity = getLicenca(idLicenca);
 
 		if (licencaEntity != null) {
@@ -71,11 +71,12 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 
 			if (usoLicencaEntity != null) {
 				getUsoLicencaRepository().remove(usoLicencaEntity);
-				return true;
+				retorno = true;
 			}
 		}
 
-		return false;
+		liberar();
+		return retorno;
 	}
 
 	public LicencaEntity getLicenca(Integer id) {
