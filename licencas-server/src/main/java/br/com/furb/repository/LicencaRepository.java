@@ -23,11 +23,11 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 
 	@SuppressWarnings("unchecked")
 	public List<LicencaEntity> getLicencas() {
-		return this.entityManager.createQuery("SELECT l FROM LicencaEntity l ORDER BY l.id").getResultList();
+		return entityManager.createQuery("SELECT l FROM LicencaEntity l ORDER BY l.id").getResultList();
 	}
 
 	public UsoLicencaEntity getDisponivel() {
-		List<?> lista = this.entityManager
+		List<?> lista = entityManager
 				.createQuery(
 						"SELECT l FROM LicencaEntity l WHERE l NOT IN (SELECT u.licencaEntity FROM UsoLicencaEntity u) ORDER BY l.id")
 				.getResultList();
@@ -74,7 +74,7 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 	}
 
 	public LicencaEntity getLicenca(Integer id) {
-		return this.entityManager.find(LicencaEntity.class, id);
+		return entityManager.find(LicencaEntity.class, id);
 	}
 
 	public void removeById(Integer id) {
