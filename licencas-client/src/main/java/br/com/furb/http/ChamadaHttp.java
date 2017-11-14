@@ -86,7 +86,7 @@ public class ChamadaHttp {
 			while ((line = reader.readLine()) != null) {
 				conteudo.append(line).append(quebraLinha);
 			}
-			respostaHttp.setConteudo(conteudo.toString());
+			respostaHttp.setConteudo(new String(conteudo.toString().getBytes(), "UTF8"));
 		}
 
 		return respostaHttp;

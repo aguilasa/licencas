@@ -2,6 +2,8 @@ package br.com.furb.repository;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import br.com.furb.entity.LicencaEntity;
 import br.com.furb.entity.UsoLicencaEntity;
 import br.com.furb.util.DateUtils;
@@ -27,6 +29,7 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 	}
 
 	public UsoLicencaEntity getDisponivel() {
+		liberar();
 		List<?> lista = entityManager
 				.createQuery(
 						"SELECT l FROM LicencaEntity l WHERE l NOT IN (SELECT u.licencaEntity FROM UsoLicencaEntity u) ORDER BY l.id")
@@ -46,6 +49,7 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 	}
 
 	public UsoLicencaEntity renova(Integer idLicenca) {
+		liberar();
 		LicencaEntity licencaEntity = getLicenca(idLicenca);
 
 		if (licencaEntity != null) {
@@ -59,11 +63,12 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 	}
 
 	public boolean atualiza(Integer idLicenca) {
+		liberar();
 		LicencaEntity licencaEntity = getLicenca(idLicenca);
 
 		if (licencaEntity != null) {
 			UsoLicencaEntity usoLicencaEntity = getUsoLicencaRepository().findByLicencaEntity(licencaEntity);
-			
+
 			if (usoLicencaEntity != null) {
 				getUsoLicencaRepository().remove(usoLicencaEntity);
 				return true;
@@ -87,6 +92,20 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 			LicencaEntity instance = entityManager.find(LicencaEntity.class, id);
 			return instance;
 		} catch (RuntimeException re) {
+			throw re;
+		}
+	}
+
+	private void liberar() {
+		try {
+			entityManager.getTransaction().begin();
+			Query query = entityManager.createQuery("delete from UsoLicencaEntity u where u.expiraEm < :expira");
+			query.setParameter("expira", DateUtils.getLimite());
+			query.executeUpdate();
+			entityManager.flush();
+			entityManager.getTransaction().commit();
+		} catch (RuntimeException re) {
+			entityManager.getTransaction().rollback();
 			throw re;
 		}
 	}

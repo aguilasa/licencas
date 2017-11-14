@@ -22,7 +22,7 @@ public class GerenciadorLicencas {
 		ChamadaHttp chamada = ChamadaHttp.getInstancia();
 		chamada.setUrlBase(Constantes.URL_BASE);
 		chamada.limparCabecalhos();
-		chamada.addCabecalho("Content-Type", "application/json;charset=utf-8");
+		chamada.addCabecalho("Content-Type", "application/json");
 		chamada.setCharset("UTF-8");
 
 		RespostaHttp resposta = chamada.get(Constantes.ADQUIRE);
