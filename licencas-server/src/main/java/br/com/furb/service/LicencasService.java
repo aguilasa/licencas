@@ -70,6 +70,7 @@ public class LicencasService {
 		Renova renova = new Renova();
 		UsoLicencaEntity usoLicencaEntity = repository.renova(id);
 		if (usoLicencaEntity != null) {
+			renova.setSucesso(true);
 			renova.setExpiraEm(usoLicencaEntity.getExpiraEm());
 		}
 		return renova;
