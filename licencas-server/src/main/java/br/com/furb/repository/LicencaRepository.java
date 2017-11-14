@@ -49,17 +49,17 @@ public class LicencaRepository extends Repository<LicencaEntity> {
 	}
 
 	public UsoLicencaEntity renova(Integer idLicenca) {
-		liberar();
+		UsoLicencaEntity usoLicencaEntity = null;
 		LicencaEntity licencaEntity = getLicenca(idLicenca);
 
 		if (licencaEntity != null) {
-			UsoLicencaEntity usoLicencaEntity = getUsoLicencaRepository().findByLicencaEntity(licencaEntity);
+			usoLicencaEntity = getUsoLicencaRepository().findByLicencaEntity(licencaEntity);
 			usoLicencaEntity.setExpiraEm(DateUtils.getExpiraEm());
 			getUsoLicencaRepository().persist(usoLicencaEntity);
-			return usoLicencaEntity;
 		}
 
-		return null;
+		liberar();
+		return usoLicencaEntity;
 	}
 
 	public boolean atualiza(Integer idLicenca) {
