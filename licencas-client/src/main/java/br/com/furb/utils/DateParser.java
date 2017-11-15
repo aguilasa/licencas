@@ -248,6 +248,9 @@ public class DateParser {
 		// test("1997-07");
 		// test("1997");
 		// test(new Date());
+		Date iniDate = parse("1997-07-16T19:20:30");
+		Date endDate = parse("1997-07-16T19:21");
+		System.out.println((endDate.getTime() - iniDate.getTime()) / 1000);
 	}
 
 }
