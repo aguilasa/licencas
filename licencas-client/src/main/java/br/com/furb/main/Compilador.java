@@ -20,8 +20,10 @@ import javax.swing.border.TitledBorder;
 import br.com.furb.licencas.GerenciadorLicencas;
 import br.com.furb.model.Licenca;
 import br.com.furb.swing.TimerLabel;
+import javax.swing.JLabel;
+import java.awt.Color;
 
-public class Compilador extends JFrame implements Observer {
+public class Compilador extends JFrame implements Observer, ActionListener {
 
 	/**
 	 * 
@@ -33,8 +35,10 @@ public class Compilador extends JFrame implements Observer {
 	private JButton btnRenovar;
 	private JButton btnCompilar;
 	private TimerLabel lblTimer;
-	private Licenca licenca;
 	private JTextArea codigo;
+	private boolean esperando = false;
+	private GerenciadorLicencas gerenciador = GerenciadorLicencas.getInstancia();
+	private JLabel lblAguardando;
 
 	/**
 	 * Launch the application.
@@ -59,6 +63,7 @@ public class Compilador extends JFrame implements Observer {
 	public Compilador() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -88,6 +93,10 @@ public class Compilador extends JFrame implements Observer {
 
 		lblTimer = new TimerLabel();
 		panel.add(lblTimer);
+		
+		lblAguardando = new JLabel("Aguardando Licen\u00E7a");
+		lblAguardando.setForeground(Color.RED);
+		panel.add(lblAguardando);
 
 		JPanel panel_1 = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
@@ -105,16 +114,17 @@ public class Compilador extends JFrame implements Observer {
 		codigo = new JTextArea();
 		contentPane.add(codigo, BorderLayout.CENTER);
 
-		GerenciadorLicencas.getInstancia().addObserver(this);
+		gerenciador.addObserver(this);
 		habilitarComponentes();
 	}
 
 	private void adquirirLicenca() {
-		GerenciadorLicencas.getInstancia().adquire();
+		gerenciador.adquire();
+		esperando = gerenciador.getLicenca() == null;
 	}
 
 	private void renovarLicenca() {
-		GerenciadorLicencas.getInstancia().renova();
+		gerenciador.renova();
 	}
 
 	private void compilar() {
@@ -123,22 +133,26 @@ public class Compilador extends JFrame implements Observer {
 	}
 
 	private void setarRestante() {
-		lblTimer.setFinalDate(licenca != null ? licenca.getExpiraEm() : null);
+		lblTimer.setFinalDate(gerenciador.getLicenca() != null ? gerenciador.getLicenca().getExpiraEm() : null);
 	}
 
 	private void habilitarComponentes() {
-		boolean valido = GerenciadorLicencas.getInstancia().validar();
-		btnAdquirir.setEnabled(!valido);
+		boolean valido = gerenciador.validar();
+		btnAdquirir.setEnabled(!valido && !esperando);
 		btnRenovar.setEnabled(valido);
 		btnCompilar.setEnabled(valido);
+		lblAguardando.setVisible(esperando);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		GerenciadorLicencas g = (GerenciadorLicencas) o;
-		licenca = g.getLicenca();
 		setarRestante();
 		habilitarComponentes();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
 	}
 
 }
