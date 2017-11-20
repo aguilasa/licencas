@@ -1,6 +1,7 @@
 package br.com.furb.main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -10,18 +11,17 @@ import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import br.com.furb.licencas.GerenciadorLicencas;
-import br.com.furb.model.Licenca;
 import br.com.furb.swing.TimerLabel;
-import javax.swing.JLabel;
-import java.awt.Color;
 
 public class Compilador extends JFrame implements Observer, ActionListener {
 
@@ -39,6 +39,7 @@ public class Compilador extends JFrame implements Observer, ActionListener {
 	private boolean esperando = false;
 	private GerenciadorLicencas gerenciador = GerenciadorLicencas.getInstancia();
 	private JLabel lblAguardando;
+	private int contador = 0;
 
 	/**
 	 * Launch the application.
@@ -93,9 +94,10 @@ public class Compilador extends JFrame implements Observer, ActionListener {
 
 		lblTimer = new TimerLabel();
 		panel.add(lblTimer);
-		
+
 		lblAguardando = new JLabel("Aguardando Licen\u00E7a");
 		lblAguardando.setForeground(Color.RED);
+		lblAguardando.setVisible(false);
 		panel.add(lblAguardando);
 
 		JPanel panel_1 = new JPanel();
@@ -116,11 +118,14 @@ public class Compilador extends JFrame implements Observer, ActionListener {
 
 		gerenciador.addObserver(this);
 		habilitarComponentes();
+		Timer t = new Timer(1000, this);
+		t.start();
 	}
 
 	private void adquirirLicenca() {
 		gerenciador.adquire();
 		esperando = gerenciador.getLicenca() == null;
+		contador = 0;
 	}
 
 	private void renovarLicenca() {
@@ -141,18 +146,42 @@ public class Compilador extends JFrame implements Observer, ActionListener {
 		btnAdquirir.setEnabled(!valido && !esperando);
 		btnRenovar.setEnabled(valido);
 		btnCompilar.setEnabled(valido);
-		lblAguardando.setVisible(esperando);
+		// lblAguardando.setVisible(esperando);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
+		if (esperando) {
+			esperando = gerenciador.getLicenca() == null;
+		}
 		setarRestante();
 		habilitarComponentes();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		boolean visible = false;
+		if (esperando) {
+			visible = !lblAguardando.isVisible();
+			if (contador < 180) {
+				if ((contador % 5) == 0) {
+					gerenciador.adquire();
+					esperando = gerenciador.getLicenca() == null;
+					if (!esperando) {
+						visible = false;
+					}
+				}
+				contador++;
+			} else {
+				contador = 0;
+				esperando = false;
+				visible = false;
+			}
+			System.out.println(contador);
+		}
 
+		lblAguardando.setVisible(visible);
+		habilitarComponentes();
 	}
 
 }
